@@ -45,29 +45,33 @@ function isValidSolanaAddress(address) {
   }
 }
 
-// Encryption functions for secure storage
+// Updated encryption functions with proper key handling
 function encrypt(text) {
+  // Create a 32-byte key by hashing the original key if needed
+  const key = crypto.createHash('sha256')
+    .update(String(process.env.ENCRYPTION_KEY))
+    .digest();
+  
   const iv = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(
-    "aes-256-cbc",
-    Buffer.from(process.env.ENCRYPTION_KEY),
-    iv
-  );
-  let encrypted = cipher.update(text, "utf8", "hex");
-  encrypted += cipher.final("hex");
-  return `${iv.toString("hex")}:${encrypted}`;
+  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+  
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  return `${iv.toString('hex')}:${encrypted}`;
 }
 
 function decrypt(text) {
-  const [ivHex, encryptedText] = text.split(":");
-  const iv = Buffer.from(ivHex, "hex");
-  const decipher = crypto.createDecipheriv(
-    "aes-256-cbc",
-    Buffer.from(process.env.ENCRYPTION_KEY),
-    iv
-  );
-  let decrypted = decipher.update(encryptedText, "hex", "utf8");
-  decrypted += decipher.final("utf8");
+  // Create a 32-byte key by hashing the original key if needed
+  const key = crypto.createHash('sha256')
+    .update(String(process.env.ENCRYPTION_KEY))
+    .digest();
+  
+  const [ivHex, encryptedText] = text.split(':');
+  const iv = Buffer.from(ivHex, 'hex');
+  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);
+  
+  let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+  decrypted += decipher.final('utf8');
   return decrypted;
 }
 
