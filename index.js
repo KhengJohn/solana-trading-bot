@@ -9,12 +9,7 @@ import {
   LAMPORTS_PER_SOL,
   Transaction,
   SystemProgram,
-} from "@solana/web3.js";
-import { Token,
-  getOrCreateAssociatedTokenAccount,
-  createTransferInstruction,
-  TOKEN_PROGRAM_ID,
-} from "@solana/spl-token";
+} from "@solana/web3.js"; 
 import bs58 from "bs58";
 import * as bip39 from "bip39";
 import { derivePath } from "ed25519-hd-key";
