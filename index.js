@@ -334,7 +334,7 @@ This feature will use Jupiter Aggregator to find the best swap routes.
 
 // List available traders to copy
 bot.command("traders", async (ctx) => {
-  console.log("Called Trader", ctx);
+  // console.log("Called Trader", ctx);
   try {
     const traders = await Trader.find({});
 
